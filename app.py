@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect
 
 app = Flask(__name__)
 
-# Configura tu llave secreta de Stripe leyendo la variable de entorno
+# Configura tu llave secreta de Stripe leyendo la variable de entorno de Render
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 @app.route('/')
@@ -19,7 +19,6 @@ def create_checkout_session():
         
         # Crear la sesión de pago oficial en Stripe
         checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
             line_items=[{
                 'price_data': {
                     'currency': 'usd',
