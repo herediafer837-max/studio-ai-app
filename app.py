@@ -1,30 +1,43 @@
 import os
-from flask import Flask, render_template, request, jsonify
-# Importa aquí las librerías o módulos que uses para tus llamadas a IA o Stripe (ej. stripe)
+import stripe
+from flask import Flask, render_template, request, jsonify, redirect
 
 app = Flask(__name__)
 
-# Configuración de clave secreta u otras credenciales si las usas
-# stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+# Configura tu llave secreta de Stripe leyendo la variable de entorno
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Ruta corregida con methods=['GET', 'POST'] para evitar el error 405
 @app.route('/create-checkout-session', methods=['GET', 'POST'])
 def create_checkout_session():
     try:
-        # AQUÍ VA TU CÓDIGO DE STRIPE O PASARELA DE PAGO
-        # Ejemplo básico de redirección o creación de sesión:
-        # session = stripe.checkout.Session.create(...)
-        # return jsonify({'url': session.url})
+        # URL base de tu aplicación en Render
+        domain_url = "https://studio-ai-app.onrender.com"
         
-        # Si actualmente solo devuelves una redirección o respuesta simulada:
-        return jsonify({
-            "success": True, 
-            "message": "Sesión de pago creada con éxito"
-        })
+        # Crear la sesión de pago oficial en Stripe
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': 'StudioAI PRO',
+                    },
+                    'unit_amount': 100, # Representa $1.00 USD en centavos
+                    'recurring': {
+                        'interval': 'month',
+                    },
+                },
+                'quantity': 1,
+            }],
+            mode='subscription',
+            success_url=domain_url + '/?success=true',
+            cancel_url=domain_url + '/?canceled=true',
+        )
+        return redirect(checkout_session.url, code=303)
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
 
@@ -33,10 +46,9 @@ def generate_text_to_video():
     try:
         mode = request.form.get('mode')
         prompt = request.form.get('prompt')
-        # Lógica para generar video con IA
         return jsonify({
             "success": True,
-            "media_url": "https://www.w3schools.com/html/mov_bbb.mp4" # URL de ejemplo o resultado real
+            "media_url": "https://www.w3schools.com/html/mov_bbb.mp4"
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
@@ -45,10 +57,9 @@ def generate_text_to_video():
 def generate_instagram_image():
     try:
         insta_prompt = request.form.get('insta_prompt')
-        # Lógica para generar imagen con IA
         return jsonify({
             "success": True,
-            "media_url": "https://via.placeholder.com/512.png" # URL de ejemplo o resultado real
+            "media_url": "https://via.placeholder.com/512.png"
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
@@ -58,10 +69,9 @@ def generate_music():
     try:
         music_prompt = request.form.get('music_prompt')
         lyrics = request.form.get('lyrics')
-        # Lógica para generar música con Minimax
         return jsonify({
             "success": True,
-            "media_url": "https://www.w3schools.com/html/horse.ogg" # URL de ejemplo o resultado real
+            "media_url": "https://www.w3schools.com/html/horse.ogg"
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
