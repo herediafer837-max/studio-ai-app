@@ -3,114 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Video, Image & Music AI</title>
+    <title>StudioAI - Generador de Contenido con IA</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Enlace corregido al manifiesto en la carpeta static -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#4f46e5">
 </head>
-<body class="bg-slate-950 text-white min-h-screen p-6">
-    <div class="max-w-xl mx-auto bg-slate-900 p-8 rounded-3xl shadow-2xl border border-slate-800">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-black bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">Studio AI 🚀</h1>
-            <a href="/create-checkout-session" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition shadow-lg">PRO ($1/mes)</a>
-        </header>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col justify-between">
 
-        <!-- Selector de Modos (4 Pestañas) -->
-        <div class="grid grid-cols-4 gap-1.5 mb-6 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
-            <button type="button" onclick="switchMode('avatar')" id="btn-mode-avatar" class="py-2.5 rounded-xl font-bold text-[11px] bg-purple-600 text-white transition shadow">Avatar</button>
-            <button type="button" onclick="switchMode('tiktok')" id="btn-mode-tiktok" class="py-2.5 rounded-xl font-bold text-[11px] text-slate-400 transition hover:text-white">TikTok</button>
-            <button type="button" onclick="switchMode('instagram')" id="btn-mode-instagram" class="py-2.5 rounded-xl font-bold text-[11px] text-slate-400 transition hover:text-white">Instagram</button>
-            <button type="button" onclick="switchMode('music')" id="btn-mode-music" class="py-2.5 rounded-xl font-bold text-[11px] text-slate-400 transition hover:text-white">Música 🎵</button>
+    <!-- Header / Navbar -->
+    <header class="bg-gray-800 border-b border-gray-700 p-4 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
+                StudioAI 🚀
+            </h1>
+            
+            <!-- Botón de Suscripción PRO con Método POST -->
+            <form action="/create-checkout-session" method="POST" class="inline-block">
+                <button type="submit" class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-gray-900 font-bold px-4 py-2 rounded-lg shadow transition transform hover:scale-105">
+                    ⭐ PRO ($1/mes)
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto p-6 flex-grow w-full">
+        <div class="text-center my-8">
+            <h2 class="text-3xl font-extrabold mb-3">Crea contenido multimedia profesional con IA</h2>
+            <p class="text-gray-400">Genera videos virales para TikTok, imágenes impactantes para Instagram y pistas musicales completas en segundos.</p>
         </div>
 
-        <!-- FORMULARIO DE VIDEOS -->
-        <form id="video-form" class="space-y-5">
-            <input type="hidden" id="mode" name="mode" value="avatar">
-
-            <!-- MODO AVATAR -->
-            <div id="section-avatar" class="space-y-4">
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Selecciona un Avatar:</label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="cursor-pointer border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center hover:border-purple-500 transition">
-                        <input type="radio" name="avatar" value="professional executive woman" checked class="hidden">
-                        <span class="block text-xs font-semibold">Ejecutiva</span>
-                    </label>
-                    <label class="cursor-pointer border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center hover:border-purple-500 transition">
-                        <input type="radio" name="avatar" value="tech developer man" class="hidden">
-                        <span class="block text-xs font-semibold">Tecnología</span>
-                    </label>
-                    <label class="cursor-pointer border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center hover:border-purple-500 transition">
-                        <input type="radio" name="avatar" value="creative futuristic artist" class="hidden">
-                        <span class="block text-xs font-semibold">Artista</span>
-                    </label>
+        <!-- Opciones de Generación -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Tarjeta Video -->
+            <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-purple-400 mb-2">🎬 Videos IA</h3>
+                    <p class="text-sm text-gray-400 mb-4">Crea clips cinematográficos o publicitarios optimizados para redes sociales.</p>
                 </div>
-
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Describe el video:</label>
-                <textarea name="prompt" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-purple-500 transition" placeholder="Ej. mujer sonriendo mientras muestra su café..."></textarea>
+                <form action="/generate-text-to-video" method="POST" class="mt-4">
+                    <input type="text" name="prompt" placeholder="Ej. Un atardecer cyberpunk..." class="w-full bg-gray-900 border border-gray-700 p-2 rounded mb-3 text-sm text-white focus:outline-none focus:border-purple-500">
+                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded transition">Generar Video</button>
+                </form>
             </div>
 
-            <!-- MODO TIKTOK ADS -->
-            <div id="section-tiktok" class="hidden space-y-4">
+            <!-- Tarjeta Imagen -->
+            <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-lg flex flex-col justify-between">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Subir Foto del Producto:</label>
-                    <input type="file" name="product_image" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-500 transition">
+                    <h3 class="text-xl font-bold text-indigo-400 mb-2">🎨 Imágenes Instagram</h3>
+                    <p class="text-sm text-gray-400 mb-4">Diseña artes visuales atractivos y publicaciones estilizadas.</p>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Nombre del Producto:</label>
-                    <input type="text" name="product_name" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-sm text-white focus:outline-none focus:border-pink-500 transition" placeholder="Ej. Termo K-pop Edition">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Descripción / Beneficios:</label>
-                    <input type="text" name="product_features" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-sm text-white focus:outline-none focus:border-pink-500 transition" placeholder="Ej. Mantiene bebidas frías 24h">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Tipo de Anuncio:</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center hover:border-pink-500 transition">
-                            <input type="radio" name="presentation_type" value="product_only" checked class="hidden">
-                            <span class="block text-xs font-semibold">📦 Solo Producto</span>
-                        </label>
-                        <label class="cursor-pointer border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center hover:border-pink-500 transition">
-                            <input type="radio" name="presentation_type" value="with_person" class="hidden">
-                            <span class="block text-xs font-semibold">🗣️ Con Persona</span>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Escena o Gancho Visual:</label>
-                    <textarea name="prompt" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-pink-500 transition" placeholder="Ej. Tomas dinámicas con iluminación brillante..."></textarea>
-                </div>
+                <form action="/generate-instagram-image" method="POST" class="mt-4">
+                    <input type="text" name="insta_prompt" placeholder="Ej. Termo minimalista en la playa..." class="w-full bg-gray-900 border border-gray-700 p-2 rounded mb-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded transition">Generar Imagen</button>
+                </form>
             </div>
 
-            <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-bold py-4 rounded-2xl transition shadow-xl text-sm tracking-wide">✨ Generar Contenido con IA</button>
-        </form>
-
-        <!-- FORMULARIO DE INSTAGRAM (IMÁGENES) -->
-        <form id="insta-form" class="hidden space-y-4">
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">Describe la Imagen Viral para Instagram:</label>
-                <textarea name="insta_prompt" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-cyan-500 transition" placeholder="Ej. Un lujoso set de skincare dorado sobre una mesa de mármol blanco..."></textarea>
+            <!-- Tarjeta Música -->
+            <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-pink-400 mb-2">🎵 Música & Beats</h3>
+                    <p class="text-sm text-gray-400 mb-4">Produce bases de Reggaetón, Deep House o Pop con vocales personalizadas.</p>
+                </div>
+                <form action="/generate-music" method="POST" class="mt-4">
+                    <input type="text" name="music_prompt" placeholder="Ej. Ritmo Reggaeton 124 BPM..." class="w-full bg-gray-900 border border-gray-700 p-2 rounded mb-3 text-sm text-white focus:outline-none focus:border-pink-500">
+                    <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 rounded transition">Generar Música</button>
+                </form>
             </div>
-            <button type="submit" id="submit-insta-btn" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-90 text-white font-bold py-4 rounded-2xl transition shadow-xl text-sm tracking-wide">📸 Generar Imagen para Instagram</button>
-        </form>
-
-        <!-- FORMULARIO DE MÚSICA (MINIMAX MUSIC 2.6) -->
-        <form id="music-form" class="hidden space-y-4">
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">Estilo Musical / Prompt (ej. Género, BPM, Instrumentos):</label>
-                <input type="text" name="music_prompt" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-sm text-white focus:outline-none focus:border-amber-500 transition mb-3" placeholder="Ej. E minor, 90 BPM, acoustic guitar ballad, male vocal, emotional">
-
-                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">Letra de la Canción (Opcional):</label>
-                <textarea name="lyrics" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-amber-500 transition font-mono text-xs" placeholder="[Verse]&#10;Tu piel radiante hoy...&#10;&#10;[Chorus]&#10;Brilla con nosotros..."></textarea>
-            </div>
-            <button type="submit" id="submit-music-btn" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:opacity-90 text-white font-bold py-4 rounded-2xl transition shadow-xl text-sm tracking-wide">🎵 Generar Canción con Minimax</button>
-        </form>
-
-        <div id="loading" class="hidden text-center mt-6 text-pink-400 text-sm font-semibold animate-pulse">
-            ⏳ Creando contenido con Inteligencia Artificial... Esto tomará un momento.
         </div>
+    </main>
 
-        <!-- RESULTADOS -->
-        <div id="result-container" class="hidden mt-6 text-center">
-            <h3 id="result-title" class="text-sm font-bold text-emerald-400 mb-3">
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 text-center py-4 text-sm text-gray-500">
+        &copy; 2026 StudioAI. Todos los derechos reservados.
+    </footer>
+
+    <!-- Service Worker Script para PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
+                    .catch(err => console.log('Error al registrar el Service Worker:', err));
+            });
+        }
+    </script>
+</body>
+</html>
